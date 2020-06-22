@@ -1,4 +1,4 @@
-#content {
+/* #content {
   margin-left: auto;
   margin-right: auto;
   width: 650px;
@@ -14,5 +14,103 @@
 
 #picture-container img {
     max-width: 600px;
+} */
+
+
+body {
+  margin: 0 auto;
+  width: 100%;
+  height: 100vh;
+  background-color: black;
 }
 
+.header {
+  background-image: url('images/utopia/0.jpg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  height: 100vh;
+}
+
+.overlay {
+  position: absolute;
+  min-height: 100%;
+  min-width: 100%;
+  left: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.welcome {
+  left: 50%;
+  position: absolute;
+  top: 45%;
+  transform: translate(-50%, -55%);
+  text-align: center
+}
+
+.welcome h1 {
+  color: #6ab446;
+  margin: 20px 0px 40px 0px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.welcome a {
+  font: large Arial;
+  text-decoration: none;
+  background-color: lightblue;
+  color: red;
+  padding: 20px 30px 20px 30px;
+}
+
+.welcome a:hover {
+  text-decoration: none;
+}
+
+#scrollable {
+  /* width: 100%; */
+  background-color: tan;
+  padding: 0;
+}
+
+.flex-parent {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.flex-child {
+  margin: 0 auto;
+  /* flex-grow: 1; */
+}
+
+.float-child {
+    width: 50%;
+    float: left;
+}
+
+#navbar {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  left: 0;
+  height: 300vh;
+  width: 20%;
+  background-color: red;
+}
+
+.section {
+  width:100%;
+  height: 100vh;
+}
+
+#about {
+  height: 100vh;
+  width: 80%;
+  background-color: lightblue;
+}
+
+#projects {
+  background-color: lightgreen;
+}
