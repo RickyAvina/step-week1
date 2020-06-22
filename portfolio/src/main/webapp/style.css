@@ -7,3 +7,12 @@
 #greeting-container {
   margin-top: 20px;
 }
+
+#profile-pic {
+    max-width: 80%;
+}
+
+#picture-container img {
+    max-width: 600px;
+}
+

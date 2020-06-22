@@ -12,17 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * Adds a random greeting to the page.
- */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+// /**
+//  * Adds a random greeting to the page.
+//  */
+// function addRandomGreeting() {
+//   const greetings =
+//       ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
 
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+//   // Pick a random greeting.
+//   const greeting = greetings[Math.floor(Math.random() * greetings.length)];
 
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+//   // Add it to the page.
+//   const greetingContainer = document.getElementById('greeting-container');
+//   greetingContainer.innerText = greeting;
+// }
+
+function getRandomImage() {
+    // Pick random image name
+    const numImages = 5;
+    const imageName = "images/utopia/" + Math.floor(Math.random()*numImages).toString() + ".jpg";
+
+    // Add it to page
+    const pictureContainer = document.getElementById('picture-container');
+    pictureContainer.innerHTML = '<img src="'+ imageName +'" />';
+
+    // Add commentary on images
+    pictureContainer.innerHTML += "</br>" + "<p>These were all painted by \
+                <a href='https://www.mccallstudios.com/'>Robert McCall<a>, one of my favorite artists.</p>"
 }
