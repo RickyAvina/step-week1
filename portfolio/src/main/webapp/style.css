@@ -88,14 +88,18 @@ body {
 
 
 #navbar {
-  position: -webkit-sticky;
-  position: sticky;
   top: 0;
   left: 0;
   height: 300vh;
   width: 20%;
   background-color: red;
   float: left;
+}
+
+#sticky-container {
+  top: 0;
+  position: -webkit-sticky;
+  position: sticky;
 }
 
 .section {
