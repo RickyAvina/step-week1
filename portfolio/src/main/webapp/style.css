@@ -86,7 +86,6 @@ body {
    color: white;
 }
 
-
 #navbar {
   top: 0;
   left: 0;
@@ -110,6 +109,26 @@ body {
 
 #about {
   background-color: lightblue;
+}
+
+h1 {
+    text-align: center;
+    font-size: 42px;
+    padding-top: 15px;
+    color: black;
+}
+
+img {
+    display:block;
+    margin:auto;
+    max-width: 400px;
+}
+
+p {
+    color: black;
+    text-align: center;
+    font-size: 32px;
+    margin: 20px;
 }
 
 #projects {

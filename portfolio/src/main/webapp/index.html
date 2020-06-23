@@ -6,14 +6,13 @@
      <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
   </head>
   <body>
     <header class="header container-fluid">
         <div class="overlay"></div>
         <div class="welcome">
             <h1>Hello, my name is Enrique Aviña</h1>
-                <a href="#projects">Click here to see my work</a>
+                <a href="#about">Click here to see my work</a>
         </div>
   </header>
 
@@ -26,13 +25,29 @@
       </div>
     </div>
     <div class="section" id="about">
-        hello
+        <h1>About me!</h1>
+        <img src="images/me.jpg"/>
+        <p>Hello! My name is Enrique Aviña, I am a rising junior studying computer science at MIT and I'm very interested in robotics, simulation, and public policy. I'm originally from Redwood City, California and have a twin brother (although we don't look all that alike). I love soccer, and have played on a team since I was 7, and love FIFA too! 
+            Scroll down to see some of my projects and hobbies!</p>
     </div>
     <div class="section" id="projects">
-        projects
+         <h1>Projects</h1>
+         <p>Please enjoy these projects from my (very) outdated <a href="http://rickyavina.com/index.html#projects">personal website</a></p>
+         <p>I am currently very interested in machine learning, and reinforcement learning in particular. I'd love to highlight one project.
+             My freshman year, I worked with MIT's Aerospace Controls Laboratory to create an augmented reality platform for testing pedestrian-vehicle interactions". The
+             repository can be found <a href="https://github.com/RickyAvina/Hololens">here</a>. Essentially, pedestrians are rendered as 
+             holograms, and a real car tries to drive around them; the information is recorded and used to train RL algorithms. Below is a gif of
+             the space mapping capabilities of the Microsoft Hololens, the headset/AR platform used in this project. </p>
+             <img src="images/holo.gif"/>
+        </br></br>
+        <p>I am currently trying to learn about investing and working on a <a href="https://gym.openai.com/">Gym</a> RL environment to derive short-term and long-term investment policies.
+        I am also trying to learn more about multi-agent RL systems!</p> 
     </div>
     <div class="section" id="interests">
-        interests
+        <h1>Interests</h1>
+        <div id="gallery"></div>
+        <p>I love soccer! I've been playing since I was 7, although I only play for fun now occasionally. My twin brother and I have always been on the same team and is our 
+            favorite activity. I also love to play FIFA, the video game and am willing to play at any time. 
     </div>
   </div>
 
@@ -42,6 +57,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
   <!-- Bootstrap JS -->
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-
+      <script src="script.js"></script>
   </body>
 </html>
