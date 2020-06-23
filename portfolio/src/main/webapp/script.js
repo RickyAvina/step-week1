@@ -12,31 +12,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 $(document).ready(function() {
-    console.log("ready");
+
     // locate gallery div
-    const pictureDiv = document.getElementById('gallery');
+    const imgRef = document.getElementById('galleryImage');
+    var images = [];
+    preload(images, 5);
 
     // cycle through photos
-    displayPhoto(pictureDiv, 0);
-    // const numImages = 5;
-    // var i = 0;
-    // setInterval(displayPhoto, 1000, pictureDiv, ++i)
-
-    // for (var i=0; i < numImages; i++) {
-    //     setInterval(displayPhoto, 1000, pictureDiv, i);
-    // }
+    displayPhoto(imgRef, images, 0);
 });
 
-function displayPhoto(div, index) {
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+
+function displayPhoto(img, images, index) {
     if (index > 4) {
         index = 0;
     } 
 
-    console.log("index: " + index.toString());
-    div.innerHTML = "<img src='images/soccer/" + index.toString() + ".jpg'/>";
+    img.src = images[index].src;
+    setTimeout(displayPhoto, 3000, img, images, index+1);
+}
 
-    setTimeout(displayPhoto, 3000, div, index+1);
+
+function preload(images, numImages) {
+    for (var i = 0; i < numImages; i++) {
+        images[i] = new Image();
+        images[i].src = "images/soccer/" + i.toString() + ".jpg";
+    }
 }
 
 function getRandomImage() {
@@ -52,5 +64,4 @@ function getRandomImage() {
     pictureContainer.innerHTML += "</br>" + "<p>These were all painted by \
                 <a href='https://www.mccallstudios.com/'>Robert McCall<a>, one of my favorite artists.</p>"
 }
-
 

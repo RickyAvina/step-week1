@@ -1,21 +1,3 @@
-/* #content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
-}
-
-#greeting-container {
-  margin-top: 20px;
-}
-
-#profile-pic {
-    max-width: 80%;
-}
-
-#picture-container img {
-    max-width: 600px;
-} */
-
 
 body {
   margin: 0 auto;
@@ -38,7 +20,7 @@ body {
   min-width: 100%;
   left: 0;
   top: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .welcome {
@@ -50,7 +32,7 @@ body {
 }
 
 .welcome h1 {
-  color: #6ab446;
+  color: black;
   margin: 20px 0px 40px 0px;
   overflow: hidden;
   white-space: nowrap;
