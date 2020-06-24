@@ -49,7 +49,6 @@ body {
 
 .project-wrapper {
     width: 100vw;
-    /* height: 100vh; */
     background-size: cover;
     z-index: 2;
     position: relative;
@@ -63,9 +62,18 @@ body {
      background-image: url("images/zombie.gif");
 }
 
+.pad-10 {
+    padding: 10px 10px;
+}
+
 .pad-60 {
     padding-left: 60px;
     padding-right: 60px;
+}
+
+.vertical-center {
+    display: flex;
+    align-items: center;
 }
 
 .content {
@@ -201,8 +209,25 @@ header {
 }
 
 .project-image {
+    display: inline-block;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
     width: 250px;
+    height: 250px;
     border-radius: 60px;
+}
+
+.hologram-image {
+    background-image: url("images/holoped/hologram.jpg");
+}
+
+.hololens-image {
+    background-image: url("images/holoped/hololens.jpg");
+}
+
+.acl-image {
+    background-image: url("images/holoped/acl.png");
 }
 
 .desc-list {
