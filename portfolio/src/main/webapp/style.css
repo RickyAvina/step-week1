@@ -49,7 +49,7 @@ body {
 
 .project-wrapper {
     width: 100vw;
-    height: 100vh;
+    /* height: 100vh; */
     background-size: cover;
     z-index: 2;
     position: relative;
@@ -61,6 +61,11 @@ body {
 
 .holoped::before {
      background-image: url("images/zombie.gif");
+}
+
+.pad-60 {
+    padding-left: 60px;
+    padding-right: 60px;
 }
 
 .content {
@@ -112,7 +117,7 @@ h1 {
 
 h2 {
     font-family: "Montserrat", sans-serif;
-    font-weight: 500;
+    font-weight: 700;
     font-size: 32px;
     color: black;
     text-align: center;
@@ -147,6 +152,11 @@ header {
 }
 
 .nav_links li a {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: darkgrey;
+    text-decoration: none;
     transition: all 0.3s ease 0s;
 }
 
@@ -164,21 +174,35 @@ header {
 }
 
 .container {
-    padding-top: 10%;
+    padding-top: 5%;
+}
+
+.container h1 {
+    font-size: 72px;
+    font-weight: 700;
+    padding: 0;
 }
 
 .container a {
     font-family: "Montserrat", sans-serif;
     font-weight: 500;
-    font-size: 32px;
+    font-size: 21px;
     color: #b53939;
+}
 
+.container p {
+    font-size: 21px;
 }
 
 #projects-wrapper {
     width: 100vw;
     height: auto;
-    background-color: whitesmoke;
+    background-color: white;
+}
+
+.project-image {
+    width: 250px;
+    border-radius: 60px;
 }
 
 .desc-list {
@@ -242,6 +266,7 @@ header {
 .card a {
     width: inherit;
     height: inherit;
+    text-decoration: none;
 }
 
 .card:hover {
