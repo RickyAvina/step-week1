@@ -40,8 +40,7 @@ body {
 
 .regular-wrapper {
     width: 100vw;
-    height:40vh;
-    padding-top:20vh;
+    height: 70vh;
     background-image: url("images/minimal.jpg");
     background-size: cover;
     z-index: 2;
