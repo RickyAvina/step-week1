@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+@import url(https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600);
 
 
 html {
@@ -8,7 +10,7 @@ html {
 body {
     margin: 0;
     font-size: 26px;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: 'Open Sans', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     color: #ffffff;
     height: 100vh;
     perspective: 1px;
@@ -26,7 +28,6 @@ body {
 }
 
 .parallax-wrapper h1 {
-    font-family: "Montserrat", sans-serif;
     font-weight: 500;
     font-size: 90px;
     color: white;
@@ -66,12 +67,19 @@ body {
     position: relative;
 }
 
+.contact-wrapper {
+    background-image: url(images/bg.png);
+    background-size: cover;
+    background-position: center center;
+    height: 100%;
+}
+
 .minimal {
     background-image: url("images/minimal.jpg");
 }
 
 .holoped::before {
-     background-image: url("images/zombie.gif");
+     background-image: url("images/holoped/zombie.gif");
 }
 
 .donovan::before {
@@ -80,6 +88,11 @@ body {
 
 .nvidia::before {
     background-image: url("images/nvidia/nvidia.jpg");
+}
+
+.blackwhite::before {
+    background-size: cover;
+    background-image: url("images/bg.png");
 }
 
 .insta-image {
@@ -147,15 +160,13 @@ body {
 }
 
 li{
-    font-family: "Montserrat", sans-serif;
     font-weight: 500;
     font-size: 16px;
-    color: darkgrey;
+    color: black;
     text-decoration: none;
 }
 
 p {
-    font-family: "Montserrat", sans-serif;
     font-weight: 500;
     font-size: 32px;
     color: black;
@@ -163,7 +174,6 @@ p {
 }
 
 h1 {
-    font-family: "Montserrat", sans-serif;
     font-weight: 500;
     font-size: 32px;
     color: black;
@@ -172,7 +182,7 @@ h1 {
 }
 
 h2 {
-    font-family: "Montserrat", sans-serif;
+    /* font-family: "Montserrat", sans-serif; */
     font-weight: 700;
     font-size: 32px;
     color: black;
@@ -185,7 +195,6 @@ header {
     top: 0;
     width: 80vw;
     height: 1vh;
-    background-color: whitesmoke;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -208,10 +217,9 @@ header {
 }
 
 .nav_links li a {
-    font-family: "Montserrat", sans-serif;
     font-weight: 500;
     font-size: 16px;
-    color: darkgrey;
+    color: black;
     text-decoration: none;
     transition: all 0.3s ease 0s;
 }
@@ -221,7 +229,6 @@ header {
 }
 
 .content h1 {
-    font-family: "Montserrat", sans-serif;
     font-weight: 500;
     font-size: 52px;
     color: black;
@@ -240,7 +247,6 @@ header {
 }
 
 .container a {
-    font-family: "Montserrat", sans-serif;
     font-weight: 500;
     font-size: 21px;
     color: #b53939;
