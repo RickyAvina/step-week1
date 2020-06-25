@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2020 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
+/* Preload all images once site load */
 $(document).ready(function() {
 
     // locate gallery div
     const imgRef = document.getElementById('galleryImage');
+
     var images = [];
     preload(images, 5);
 
@@ -24,16 +25,19 @@ $(document).ready(function() {
     displayPhoto(imgRef, images, 0);
 });
 
+/* Enable smooth anchor tag scrolling */
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
 
+        /* enable smooth scrolling for same page anchor tags */
         document.querySelector(this.getAttribute('href')).scrollIntoView({
             behavior: 'smooth'
         });
     });
 });
 
+/* Cycle through 4 gallery photos every 3000ms */
 function displayPhoto(img, images, index) {
     if (index > 4) {
         index = 0;
@@ -43,7 +47,7 @@ function displayPhoto(img, images, index) {
     setTimeout(displayPhoto, 3000, img, images, index+1);
 }
 
-
+/* Cache images in the `images/soccer` directory */
 function preload(images, numImages) {
     for (var i = 0; i < numImages; i++) {
         images[i] = new Image();
@@ -51,7 +55,9 @@ function preload(images, numImages) {
     }
 }
 
+/* Display a random image in the `picture-container` div */
 function getRandomImage() {
+
     // Pick random image name
     const numImages = 5;
     const imageName = "images/utopia/" + Math.floor(Math.random()*numImages).toString() + ".jpg";
