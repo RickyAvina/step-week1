@@ -25,6 +25,18 @@ body {
     transform-style: preserve-3d;
 }
 
+.parallax-wrapper h1 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    font-size: 90px;
+    color: white;
+    text-align: center;
+}
+
+.black {
+    color: black;
+}
+
 .parallax-wrapper::before {
     content:"";
     width: 100vw;
@@ -66,12 +78,32 @@ body {
     background-image: url("images/facebook/donovan.jpg")
 }
 
+.nvidia::before {
+    background-image: url("images/nvidia/nvidia.jpg");
+}
+
 .insta-image {
     background-image: url("images/facebook/insta.jpg");
 }
 
 .security-image {
     background-image: url("images/facebook/security.png");
+}
+
+.nvidia-team-image {
+    background-image: url("images/nvidia/team.jpg")
+}
+
+.car-image {
+    background-image: url("images/nvidia/car.jpg");
+}
+
+.hat-image {
+    background-image: url("images/robotics/hat.png")
+}
+
+.robot::before {
+    background-image: url("images/robotics/robot.jpg")
 }
 
 .pad-10 {
@@ -81,6 +113,10 @@ body {
 .pad-60 {
     padding-left: 60px;
     padding-right: 60px;
+}
+
+.width-40 {
+    width: 40%;
 }
 
 .vertical-center {
