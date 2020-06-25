@@ -212,7 +212,7 @@ input {
   border: none;
   outline: none;
   border-bottom: 1px solid #B1B1B1;
-  color: #B1B1B1;
+  color: white;
   background: rgba(0,0,0,0);
   opacity: 0.5;
   transition: 0.2s ease;
@@ -264,21 +264,21 @@ input:focus ~ .highlight {
 
 /* ANIMATIONS ================ */
 @-webkit-keyframes inputHighlighter {
-  from { background:#B1B1B1; }
+  from { background: white; }
   to 	{ width:0; background:transparent; }
 }
 @-moz-keyframes inputHighlighter {
-  from { background:#B1B1B1; }
+  from { background: white; }
   to 	{ width:0; background:transparent; }
 }
 @keyframes inputHighlighter {
-  from { background:#B1B1B1; }
+  from { background: white; }
   to 	{ width:0; background:transparent; }
 }
 
 a.send-btn {
   float: right;
-  color: #B1B1B1;
+  color: white;
   transition: 0.2s ease;
 }
 
