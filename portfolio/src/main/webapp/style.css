@@ -19,12 +19,36 @@ body {
     overflow-y:auto;
 }
 
+.index {
+    overflow-y: hidden;
+    margin-left: 60px;
+    margin-top: 120px;
+}
+
 .parallax-wrapper {
     width: 100vw;
     height:100vh;
     padding-top:30vh;
     box-sizing: border-box;
     transform-style: preserve-3d;
+
+}
+
+.index-wrapper {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.bg {
+    width: 90%;
+    height: 90%;
+    margin: 0 auto;
+    background-image: url(images/rickyy.jpg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 
 .parallax-wrapper h1 {
@@ -44,16 +68,17 @@ body {
     height: 100vh;
     top:0;
     left:0;
-    background-image: url("images/soccer/0.jpg");
+    /* background-image: url("images/rickyy.jpg"); */
     background-size: cover;
     position: absolute;
     z-index: -1;
     transform:translateZ(-1px) scale(2);
+
 }
 
 .regular-wrapper {
     width: 100vw;
-    height: 70vh;
+    height: 40vh;
     background-image: url("images/minimal.jpg");
     background-size: cover;
     z-index: 2;
