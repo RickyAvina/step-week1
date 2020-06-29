@@ -23,6 +23,16 @@
       <version>4.0.1</version>
       <scope>provided</scope>
     </dependency>
+
+    <!-- Installing Cloud Client Libraries for Datastore API -->
+    <!--https://cloud.google.com/datastore/docs/reference/libraries#client-libraries-install-java -->
+    <dependency>
+        <groupId>com.google.cloud</groupId>
+        <artifactId>libraries-bom</artifactId>
+        <version>3.0.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+    </dependency>
   </dependencies>
 
   <build>
