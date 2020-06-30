@@ -30,4 +30,13 @@ public class DataServlet extends HttpServlet {
     response.setContentType("text/html;");
     response.getWriter().println("<h1>Hello Enrique! This is a test response.</h1>");
   }
+
+  public String getJSON(){
+      StringBuilder sb = new StringBuilder();
+      sb.append("{");
+      sb.append("\"messages\": ");
+      sb.append("[\"Hello world!\", \"Hola mundo!\", \"Bonjour le monde!\", \"你好，世界!\"]");
+      sb.append("}");
+      return sb.toString();
+  }
 }
