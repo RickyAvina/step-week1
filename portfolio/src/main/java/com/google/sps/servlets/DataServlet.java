@@ -15,12 +15,14 @@
 package com.google.sps.servlets;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Arrays;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
+/** Servlet that returns writes greetings in many languages in JSON format */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
@@ -28,15 +30,29 @@ public class DataServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     System.out.println("doGet() activated!");
     response.setContentType("text/html;");
-    response.getWriter().println("<h1>Hello Enrique! This is a test response.</h1>");
+
+    // build up JSON response
+    StringBuilder sb = new StringBuilder();
+    sb.append("{");
+    sb.append("\"messages\": ");
+    sb.append("[");
+
+    for (String greeting: getGreetings()) {
+        sb.append("\"");
+        sb.append(greeting);
+        sb.append("\", ");
+    }
+
+    sb.setLength(sb.length() - 2);
+    sb.append("]");
+    sb.append("}");
+
+    System.out.println(sb.toString());
+    response.getWriter().println(sb.toString());
   }
 
-  public String getJSON(){
-      StringBuilder sb = new StringBuilder();
-      sb.append("{");
-      sb.append("\"messages\": ");
-      sb.append("[\"Hello world!\", \"Hola mundo!\", \"Bonjour le monde!\", \"你好，世界!\"]");
-      sb.append("}");
-      return sb.toString();
+  /* Get hello world greetings in many different languages */
+  public List<String> getGreetings(){
+      return Arrays.asList("Hello world!", "Hola mundo!", "Bonjour le monde!", "Moien Welt!");
   }
 }

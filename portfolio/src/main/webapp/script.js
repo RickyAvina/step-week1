@@ -13,11 +13,28 @@
 // limitations under the License.
 
 /**
+ * Set up code to run when body loads
+ */
+function onLoad() {
+    getLinkToCreatorsPage();
+    getGreetings();
+}
+
+/**
  * Fetch and display the link to the page pf the creator of the home page's 
  * background for credit.  
 */
 function getLinkToCreatorsPage() {
     fetch('/bg-creator').then(response => response.text()).then((link) => {
         document.getElementById("linkRef").innerHTML = link;
+    });
+}
+
+/* Fetch DataServerlets JSON response representing greetings in many languages */
+function getGreetings() {
+    console.log("getGreetings() activated");
+
+    fetch('/data').then(response => response.json()).then((json) => {
+        console.log(json);
     });
 }
