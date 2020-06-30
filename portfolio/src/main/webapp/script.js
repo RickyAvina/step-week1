@@ -12,62 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/* Preload all images once site load */
-$(document).ready(function() {
+/**
+ * Set up code to run when body loads
+ */
+function onLoad() {
+    getLinkToCreatorsPage();
+    getGreetings();
+}
 
-    // locate gallery div
-    const imgRef = document.getElementById('galleryImage');
-
-    var images = [];
-    preload(images, 5);
-
-    // cycle through photos
-    displayPhoto(imgRef, images, 0);
-});
-
-/* Enable smooth anchor tag scrolling */
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-
-        /* enable smooth scrolling for same page anchor tags */
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-        });
+/**
+ * Fetch and display the link to the page pf the creator of the home page's 
+ * background for credit.  
+*/
+function getLinkToCreatorsPage() {
+    fetch('/bg-creator').then(response => response.text()).then((link) => {
+        document.getElementById("linkRef").innerHTML = link;
     });
-});
-
-/* Cycle through 4 gallery photos every 3000ms */
-function displayPhoto(img, images, index) {
-    if (index > 4) {
-        index = 0;
-    } 
-
-    img.src = images[index].src;
-    setTimeout(displayPhoto, 3000, img, images, index+1);
 }
 
-/* Cache images in the `images/soccer` directory */
-function preload(images, numImages) {
-    for (var i = 0; i < numImages; i++) {
-        images[i] = new Image();
-        images[i].src = "images/soccer/" + i.toString() + ".jpg";
-    }
+/* Fetch DataServerlets JSON response representing greetings in many languages */
+function getGreetings() {
+    console.log("getGreetings() activated");
+
+    fetch('/data').then(response => response.json()).then((json) => {
+        console.log(json);
+    });
 }
-
-/* Display a random image in the `picture-container` div */
-function getRandomImage() {
-
-    // Pick random image name
-    const numImages = 5;
-    const imageName = "images/utopia/" + Math.floor(Math.random()*numImages).toString() + ".jpg";
-
-    // Add it to page
-    const pictureContainer = document.getElementById('picture-container');
-    pictureContainer.innerHTML = '<img src="'+ imageName +'" />';
-
-    // Add commentary on images
-    pictureContainer.innerHTML += "</br>" + "<p>These were all painted by \
-                <a href='https://www.mccallstudios.com/'>Robert McCall<a>, one of my favorite artists.</p>"
-}
-
