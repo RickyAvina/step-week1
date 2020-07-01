@@ -66,7 +66,8 @@ import java.time.format.DateTimeFormatter;
         }
 
         // delete extra characters 
-        sb.setLength(sb.length() - 2);
+        if (sb.length() > 14)
+            sb.setLength(sb.length() - 2);
         sb.append("] }");
         
         return sb.toString();

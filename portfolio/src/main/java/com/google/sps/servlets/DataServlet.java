@@ -33,26 +33,12 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     System.out.println("doGet() activated!");
-    response.setContentType("text/html;");
+    response.setContentType("application/json");
 
-    // build up JSON response
-    StringBuilder sb = new StringBuilder();
-    sb.append("{");
-    sb.append("\"messages\": ");
-    sb.append("[");
-
-    for (String greeting: getGreetings()) {
-        sb.append("\"");
-        sb.append(greeting);
-        sb.append("\", ");
-    }
-
-    sb.setLength(sb.length() - 2);
-    sb.append("]");
-    sb.append("}");
-
-    System.out.println(sb.toString());
-    response.getWriter().println(sb.toString());
+    // return the json
+    String json = comments.json();
+    System.out.println(json);
+    response.getWriter().println(json);
   }
 
   @Override
@@ -66,13 +52,12 @@ public class DataServlet extends HttpServlet {
 
       // convert to JSON
       String json = comments.json();
-    
+
       response.setContentType("text/html;");
       response.getWriter().println("<p>JSON\n: " + json + "</p>");
     
-    //   System.out.println(json);
-
       // redirect
+      response.sendRedirect("/form.html");
   }
 
   /* Get hello world greetings in many different languages */
