@@ -22,6 +22,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 
 /** Servlet that returns writes greetings in many languages in JSON format */
 @WebServlet("/data")
@@ -52,8 +55,13 @@ public class DataServlet extends HttpServlet {
       // convert to JSON
       String json = comments.json();
 
-      response.setContentType("text/html;");
-      response.getWriter().println("<p>JSON\n: " + json + "</p>");
+      // store data
+      Entity taskEntity = new Entity("Task");
+      taskEntity.setProperty("comment", comment);
+      taskEntity.setProperty("timestamp", now);
+
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      datastore.put(taskEntity);
     
       // redirect
       response.sendRedirect("/form.html");

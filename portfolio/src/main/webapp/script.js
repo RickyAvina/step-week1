@@ -43,7 +43,6 @@ function getGreetings() {
  * Fetches all the comments and displays them on UI.
  */
 function loadComments() {
-    console.log("loadComments()");
     fetch('/data').then(response => response.json()).then((commentsJSON) => {
 
         const commentsEl = document.getElementById("comments");
