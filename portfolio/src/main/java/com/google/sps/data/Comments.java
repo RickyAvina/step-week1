@@ -14,11 +14,11 @@
 
 package com.google.sps.data;
 
-import java.time.LocalDateTime;
+// import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.HashMap;
-import java.time.format.DateTimeFormatter;
+// import java.time.format.DateTimeFormatter;
 
 /**
  * Class representing the comments left on our webpage, not threadsafe.
@@ -26,22 +26,22 @@ import java.time.format.DateTimeFormatter;
  public class Comments {
 
     /* Map associating comments and the time they were written. */
-    private final Map<LocalDateTime, String> comments;
+    private final Map<Long, String> comments;
 
     /* The format that dates are reported as */
-    private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    // private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     /**
      * Create an empty map of comments.
      */
     public Comments() {
-        comments = new HashMap<LocalDateTime, String>();
+        comments = new HashMap<Long, String>();
     }
 
     /**
      * Add a comment to our map of comments
     */
-    public void addComment(LocalDateTime time, String comment) {
+    public void addComment(long time, String comment) {
         comments.put(time, comment);
     }
 
@@ -53,10 +53,10 @@ import java.time.format.DateTimeFormatter;
         sb.append("{");
         sb.append("\"comments\": [");
 
-        for (Map.Entry<LocalDateTime, String> entry : comments.entrySet()) {
-            LocalDateTime time = entry.getKey();            
+        for (Map.Entry<Long, String> entry : comments.entrySet()) {
+            long time = entry.getKey();            
             sb.append("{ \"date\": \"");
-            sb.append(time.format(dateFormatter));
+            sb.append(time);
             sb.append("\",");
 
             sb.append("\"comment\": \"");

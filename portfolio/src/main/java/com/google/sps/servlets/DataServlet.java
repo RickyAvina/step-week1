@@ -22,7 +22,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
 
 /** Servlet that returns writes greetings in many languages in JSON format */
 @WebServlet("/data")
@@ -47,7 +46,7 @@ public class DataServlet extends HttpServlet {
 
       // get input from the form
       String comment = request.getParameter("comment");
-      LocalDateTime now = LocalDateTime.now();
+      long now = System.currentTimeMillis();
       comments.addComment(now, comment);
 
       // convert to JSON
