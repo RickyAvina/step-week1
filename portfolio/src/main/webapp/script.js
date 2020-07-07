@@ -60,3 +60,13 @@ function loadComments() {
         }
     });
 }
+
+/**
+ * Delete a comment with the specified `id`
+ */
+function deleteComment(id) {
+    fetch('/delete', {
+        method: 'POST',
+        body: id
+    });
+}

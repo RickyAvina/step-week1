@@ -23,6 +23,7 @@
       <version>4.0.1</version>
       <scope>provided</scope>
     </dependency>
+    <!-- GSON -->
     <dependency>
         <groupId>com.google.code.gson</groupId>
         <artifactId>gson</artifactId>
@@ -35,6 +36,7 @@
         <version>4.13</version>
         <scope>test</scope>
     </dependency>
+    <!-- AppEngine API -->
     <dependency>
         <groupId>com.google.appengine</groupId>
         <artifactId>appengine-api-1.0-sdk</artifactId>
