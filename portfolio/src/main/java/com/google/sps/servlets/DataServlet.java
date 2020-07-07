@@ -14,6 +14,7 @@
 
 package com.google.sps.servlets;
 
+import com.google.sps.data.Comments;
 import java.io.IOException;
 import java.util.List;
 import java.util.Arrays;
@@ -21,34 +22,67 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 
 /** Servlet that returns writes greetings in many languages in JSON format */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  private Comments comments = new Comments();
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     System.out.println("doGet() activated!");
-    response.setContentType("text/html;");
 
-    // build up JSON response
-    StringBuilder sb = new StringBuilder();
-    sb.append("{");
-    sb.append("\"messages\": ");
-    sb.append("[");
+    Query query = new Query("Task").addSort("timestamp", SortDirection.DESCENDING);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+    
+    System.out.println(results.toString());
 
-    for (String greeting: getGreetings()) {
-        sb.append("\"");
-        sb.append(greeting);
-        sb.append("\", ");
+    for (Entity entity : results.asIterable()) {
+      long id = entity.getKey().getId();
+      String comment = (String) entity.getProperty("comment");
+      long timestamp = (long) entity.getProperty("timestamp");
+      System.out.println(comment);
+      comments.addComment(timestamp, comment);
     }
 
-    sb.setLength(sb.length() - 2);
-    sb.append("]");
-    sb.append("}");
+    // return the json
+    String json = comments.json();
+    System.out.println(json);
 
-    System.out.println(sb.toString());
-    response.getWriter().println(sb.toString());
+    response.setContentType("application/json");
+    response.getWriter().println(json);
+  }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      response.setContentType("application/json");
+
+      // get input from the form
+      String comment = request.getParameter("comment");
+      long now = System.currentTimeMillis();
+      comments.addComment(now, comment);
+
+      // convert to JSON
+      String json = comments.json();
+
+      // store data
+      Entity taskEntity = new Entity("Task");
+      taskEntity.setProperty("comment", comment);
+      taskEntity.setProperty("timestamp", now);
+
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      datastore.put(taskEntity);
+    
+      // redirect
+      response.sendRedirect("/form.html");
   }
 
   /* Get hello world greetings in many different languages */

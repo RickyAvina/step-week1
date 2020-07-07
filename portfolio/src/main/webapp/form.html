@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Enrique's Portfolio</title>
+    <!-- <link rel="stylesheet" href="css/styles-contact.css"> -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <script src="script.js"></script>
+  </head>
+  <body onload="loadComments()">
+    <div class="container">
+        <form action="/data" method="POST">
+            <div>
+                <label for="comment">Comment: <abbr title="required" aria-label="required">*</abbr></label>
+                <input id="comment" type="text" name="comment">
+                </br>
+                <input type="submit"/>
+            </div>
+        </form>
+        <div id="comments"></div>  
+    </div>
+</body>
+</html>
