@@ -9,12 +9,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Query.*;
+import com.google.gson.Gson;
+
 
 @WebServlet("/delete")
 public class DeleteServlet extends HttpServlet {
@@ -26,11 +31,17 @@ public class DeleteServlet extends HttpServlet {
     System.out.println("Button val: " + id);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query = new Query("Task").setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
+    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
-    Entity entity = results.asSingleEntity();
-    datastore.delete(entity.getKey());
-    
+
+    for (Entity entity : results.asIterable()) {
+      long comment_id = (long) entity.getProperty("comment_id");
+
+      if (Long.toString(comment_id).equals(id)) {
+          datastore.delete(entity.getKey());
+      }
+    }
+
     response.sendRedirect("/home");
   }
 

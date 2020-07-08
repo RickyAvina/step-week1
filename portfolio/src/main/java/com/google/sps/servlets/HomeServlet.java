@@ -75,20 +75,22 @@ public class HomeServlet extends HttpServlet {
     // comment thread, visible by all
     out.println("<ul>");
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query = new Query("Task").addSort("timestamp", SortDirection.DESCENDING);
+    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
       String comment = (String) entity.getProperty("comment");
       long timestamp = (long) entity.getProperty("timestamp");
-      String id = (String) entity.getProperty("id");
-      String nickname = getUserNickname(id);
-    
+      Key key_id = entity.getKey();
+      String comment_id = Long.toString((long) entity.getProperty("comment_id"));
+      String user_id = (String) entity.getProperty("user_id");
+
+      String nickname = getUserNickname(user_id);
       out.println("<li><span style='color:blue;'>" + convertTime(timestamp) + 
                   "</span> <span style='color:green'>" + nickname + "</span>: " + 
                   comment + "<form method='POST' action='/delete'>" +
                                 "<input type='submit' name='deleteBtn' value='Delete' />" +
-                                "<input type='hidden' name='comment' value='" + id + "'/>" +
+                                "<input type='hidden' name='comment' value='" + comment_id + "'/>" +
                             "</form> </li>");
     } 
     out.println("</ul>");
@@ -117,8 +119,11 @@ public class HomeServlet extends HttpServlet {
     String comment = request.getParameter("comment");
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Entity messageEntity = new Entity("Task");
-    messageEntity.setProperty("id", id);
+    Entity messageEntity = new Entity("Comment");
+
+    long comment_id = (long)(Math.random() * 100000000);
+    messageEntity.setProperty("comment_id", comment_id);
+    messageEntity.setProperty("user_id", id);
     messageEntity.setProperty("comment", comment);
     messageEntity.setProperty("timestamp", System.currentTimeMillis());
 
@@ -149,7 +154,7 @@ public class HomeServlet extends HttpServlet {
   /** Return a JSON string representing the comments data structure **/
   private String getCommentsJson(){
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query = new Query("Task").addSort("timestamp", SortDirection.DESCENDING);
+    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
     List<Entity> comments = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(10));
     Gson gson = new Gson();
     String json = gson.toJson(comments);
