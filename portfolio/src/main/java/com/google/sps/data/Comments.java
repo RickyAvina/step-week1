@@ -17,18 +17,14 @@ package com.google.sps.data;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.HashMap;
-// import java.time.format.DateTimeFormatter;
 
 /**
- * Class representing the comments left on our webpage, not threadsafe.
+ * Class representing the comments left on our webpage.
  */
  public class Comments {
 
     /* Map associating comments and the time they were written. */
     private final Map<Long, String> comments;
-
-    /* The format that dates are reported as */
-    // private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     /**
      * Create an empty map of comments.
@@ -47,7 +43,7 @@ import java.util.HashMap;
     /**
      * Serialize the comments into JSON format.
      */
-    public String json() {
+    public String stringToJson() {
         StringBuilder sb = new StringBuilder();
         sb.append("{");
         sb.append("\"comments\": [");
