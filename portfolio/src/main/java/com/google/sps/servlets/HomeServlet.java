@@ -36,7 +36,10 @@ import java.text.Format;
 import java.util.Date;
 import com.google.gson.Gson;
 import java.util.List;
-
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
+import java.awt.Color;
 
 @WebServlet("/home")
 public class HomeServlet extends HttpServlet {
@@ -84,17 +87,41 @@ public class HomeServlet extends HttpServlet {
       Key key_id = entity.getKey();
       String comment_id = Long.toString((long) entity.getProperty("comment_id"));
       String user_id = (String) entity.getProperty("user_id");
-
+      double sentiment = (double) entity.getProperty("sentiment");
+      String sentimentHex = getColor(sentiment);
       String nickname = getUserNickname(user_id);
-      out.println("<li><span style='color:blue;'>" + convertTime(timestamp) + 
-                  "</span> <span style='color:green'>" + nickname + "</span>: " + 
-                  comment + "<form method='POST' action='/delete'>" +
-                                "<input type='submit' name='deleteBtn' value='Delete' />" +
-                                "<input type='hidden' name='comment' value='" + comment_id + "'/>" +
-                            "</form> </li>");
+
+      out.println("<li>" +
+                    "<span style='color:blue;'>" + convertTime(timestamp) + "</span> " +
+                    "<span style='color: black;'>" + nickname + "</span>: " +
+                    "<span style='color: " + sentimentHex + ";'>" + comment + "</span>" +
+                    "<form method='POST' action='/delete'>"+
+                        "<input type='submit' name='deleteBtn' value='Delete'/>" +
+                        "<input type='hidden' name='comment' value='" + comment_id + "'/>" +
+                        "</form> </li>");
     } 
     out.println("</ul>");
     
+  }
+
+  /**
+   * Convert a sentiment value in the range [-1, 1] to a color
+   * between red and green to reflect sentiment 
+  */
+  private String getColor(double sentiment) {
+      // convert sentiment to a color value in range [0,255]
+      double adjustedVal = (sentiment+1)*255/2.0;  
+      double red = 255.0 - adjustedVal;
+      double green = adjustedVal;
+
+      Color color = new Color((int)red, (int)green, 0);
+
+      String hex = Integer.toHexString(color.getRGB() & 0xffffff);
+      if (hex.length() < 6) {
+        hex = "0" + hex;
+      }
+      hex = "#" + hex;
+      return hex;
   }
 
   @Override
@@ -127,7 +154,16 @@ public class HomeServlet extends HttpServlet {
     messageEntity.setProperty("comment", comment);
     messageEntity.setProperty("timestamp", System.currentTimeMillis());
 
+    // Sentiment analysis
+    Document doc = Document.newBuilder().setContent(comment).setType(Document.Type.PLAIN_TEXT).build();
+    LanguageServiceClient languageService = LanguageServiceClient.create();
+    Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+    float score = sentiment.getScore();
+    languageService.close();
+    messageEntity.setProperty("sentiment", score);
+
     datastore.put(messageEntity);
+
     response.sendRedirect("/home");
   }
 
