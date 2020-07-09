@@ -36,6 +36,10 @@ public class DeleteServlet extends HttpServlet {
 
     for (Entity entity : results.asIterable()) {
       long comment_id = (long) entity.getProperty("comment_id");
+      if (comment_id == null) {
+          System.err.println("comment_id of comment is NULL");
+          break;
+      }
 
       if (Long.toString(comment_id).equals(id)) {
           datastore.delete(entity.getKey());

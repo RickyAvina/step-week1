@@ -104,26 +104,6 @@ public class HomeServlet extends HttpServlet {
     
   }
 
-  /**
-   * Convert a sentiment value in the range [-1, 1] to a color
-   * between red and green to reflect sentiment 
-  */
-  private String getColor(double sentiment) {
-      // convert sentiment to a color value in range [0,255]
-      double adjustedVal = (sentiment+1)*255/2.0;  
-      double red = 255.0 - adjustedVal;
-      double green = adjustedVal;
-
-      Color color = new Color((int)red, (int)green, 0);
-
-      String hex = Integer.toHexString(color.getRGB() & 0xffffff);
-      if (hex.length() < 6) {
-        hex = "0" + hex;
-      }
-      hex = "#" + hex;
-      return hex;
-  }
-
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
@@ -165,6 +145,23 @@ public class HomeServlet extends HttpServlet {
     datastore.put(messageEntity);
 
     response.sendRedirect("/home");
+  }
+
+  /**
+   * Convert a sentiment to a color
+   * @param sentiment - a double in the range [-1, 1] representing
+   *                    the sentiment of a given piece of text
+   * @return - a hexidecimal color String 
+   */
+  private String getColor(double sentiment) {
+
+      // convert sentiment to a color value in range [0,255]
+      double adjustedVal = (sentiment+1)*255/2.0;  
+      double red = 255.0 - adjustedVal;
+      double green = adjustedVal;
+
+      // convert RGB to a hex string
+      return String.format("#%02x%02x%02x", red, green, 0);
   }
 
   /** Returns the nickname of the user with id, or null if the user has not set a nickname. */
