@@ -14,6 +14,7 @@
 
 package com.google.sps.servlets;
 
+import com.google.sps.data.ConstantUtils;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -60,13 +61,13 @@ public class NicknameServlet extends HttpServlet {
       return;
     }
 
-    String nickname = request.getParameter("nickname");
+    String nickname = request.getParameter(ConstantUtils.UserTable.COLUMN_NICKNAME);
     String id = userService.getCurrentUser().getUserId();
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Entity entity = new Entity("UserInfo", id);
-    entity.setProperty("id", id);
-    entity.setProperty("nickname", nickname);
+    Entity entity = new Entity(ConstantUtils.UserTable.TABLE_TYPE, id);
+    entity.setProperty(ConstantUtils.UserTable.COLUMN_ID, id);
+    entity.setProperty(ConstantUtils.UserTable.COLUMN_NICKNAME, nickname);
 
     // The put() function automatically inserts new data or updates existing data based on ID
     datastore.put(entity);
@@ -79,14 +80,14 @@ public class NicknameServlet extends HttpServlet {
   private String getUserNickname(String id) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query =
-        new Query("UserInfo")
-            .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
+        new Query(ConstantUtils.UserTable.TABLE_TYPE)
+            .setFilter(new Query.FilterPredicate(ConstantUtils.UserTable.COLUMN_ID, Query.FilterOperator.EQUAL, id));
     PreparedQuery results = datastore.prepare(query);
     Entity entity = results.asSingleEntity();
     if (entity == null) {
       return "";
     }
-    String nickname = (String) entity.getProperty("nickname");
+    String nickname = (String) entity.getProperty(ConstantUtils.UserTable.COLUMN_NICKNAME);
     return nickname;
   }
 }
