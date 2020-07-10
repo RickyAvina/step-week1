@@ -54,7 +54,7 @@ public class DataServlet extends HttpServlet {
     }
 
     // return the json
-    String json = comments.json();
+    String json = comments.stringToJson();
     System.out.println(json);
 
     response.setContentType("application/json");
@@ -71,7 +71,7 @@ public class DataServlet extends HttpServlet {
       comments.addComment(now, comment);
 
       // convert to JSON
-      String json = comments.json();
+      String json = comments.stringToJson();
 
       // store data
       Entity taskEntity = new Entity("Task");

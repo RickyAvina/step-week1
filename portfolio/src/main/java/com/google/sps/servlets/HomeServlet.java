@@ -14,6 +14,8 @@
 
 package com.google.sps.servlets;
 
+import com.google.sps.data.ConstantUtils;
+// import com.google.sps.data.ConstantUtils.CommentTable;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -36,7 +38,10 @@ import java.text.Format;
 import java.util.Date;
 import com.google.gson.Gson;
 import java.util.List;
-
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
+import java.awt.Color;
 
 @WebServlet("/home")
 public class HomeServlet extends HttpServlet {
@@ -75,21 +80,27 @@ public class HomeServlet extends HttpServlet {
     // comment thread, visible by all
     out.println("<ul>");
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query = new Query("Task").addSort("timestamp", SortDirection.DESCENDING);
+    Query query = new Query(ConstantUtils.CommentTable.TABLE_TYPE).addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
-      String comment = (String) entity.getProperty("comment");
-      long timestamp = (long) entity.getProperty("timestamp");
-      String id = (String) entity.getProperty("id");
-      String nickname = getUserNickname(id);
-    
-      out.println("<li><span style='color:blue;'>" + convertTime(timestamp) + 
-                  "</span> <span style='color:green'>" + nickname + "</span>: " + 
-                  comment + "<form method='POST' action='/delete'>" +
-                                "<input type='submit' name='deleteBtn' value='Delete' />" +
-                                "<input type='hidden' name='comment' value='" + id + "'/>" +
-                            "</form> </li>");
+      String comment = (String) entity.getProperty(ConstantUtils.CommentTable.COLUMN_COMMENT);
+      long timestamp = (long) entity.getProperty(ConstantUtils.CommentTable.COLUMN_TIMESTAMP);
+      Key key_id = entity.getKey();
+      String comment_id = Long.toString((long) entity.getProperty(ConstantUtils.CommentTable.COLUMN_COMMENT_ID));
+      String user_id = (String) entity.getProperty(ConstantUtils.CommentTable.COLUMN_USER_ID);
+      double sentiment = (double) entity.getProperty(ConstantUtils.CommentTable.COLUMN_SENTIMENT);
+      String sentimentHex = getColor(sentiment);
+      String nickname = getUserNickname(user_id);
+
+      out.println("<li>" +
+                    "<span style='color:blue;'>" + convertTime(timestamp) + "</span> " +
+                    "<span style='color: black;'>" + nickname + "</span>: " +
+                    "<span style='color: " + sentimentHex + ";'>" + comment + "</span>" +
+                    "<form method='POST' action='/delete'>"+
+                        "<input type='submit' name='deleteBtn' value='Delete'/>" +
+                        "<input type='hidden' name='comment' value='" + comment_id + "'/>" +
+                        "</form> </li>");
     } 
     out.println("</ul>");
     
@@ -113,29 +124,65 @@ public class HomeServlet extends HttpServlet {
     }
 
     // Grab user and form data
-    String id = userService.getCurrentUser().getUserId();
-    String comment = request.getParameter("comment");
+    String user_id = userService.getCurrentUser().getUserId();
+    String comment = request.getParameter(ConstantUtils.CommentTable.COLUMN_COMMENT);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Entity messageEntity = new Entity("Task");
-    messageEntity.setProperty("id", id);
-    messageEntity.setProperty("comment", comment);
-    messageEntity.setProperty("timestamp", System.currentTimeMillis());
+    Entity messageEntity = new Entity(ConstantUtils.CommentTable.TABLE_TYPE);
+
+    long comment_id = (long)(Math.random() * 100000000);
+    messageEntity.setProperty(ConstantUtils.CommentTable.COLUMN_COMMENT_ID, comment_id);
+    messageEntity.setProperty(ConstantUtils.CommentTable.COLUMN_USER_ID, user_id);
+    messageEntity.setProperty(ConstantUtils.CommentTable.COLUMN_COMMENT, comment);
+    messageEntity.setProperty(ConstantUtils.CommentTable.COLUMN_TIMESTAMP, System.currentTimeMillis());
+
+    // Sentiment analysis
+    Document doc = Document.newBuilder().setContent(comment).setType(Document.Type.PLAIN_TEXT).build();
+    LanguageServiceClient languageService = LanguageServiceClient.create();
+    Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+    float score = sentiment.getScore();
+    languageService.close();
+    messageEntity.setProperty(ConstantUtils.CommentTable.COLUMN_SENTIMENT, score);
 
     datastore.put(messageEntity);
+
     response.sendRedirect("/home");
+  }
+
+  /**
+   * Convert a sentiment to a color
+   * @param sentiment - a double in the range [-1, 1] representing
+   *                    the sentiment of a given piece of text
+   * @return - a hexidecimal color String 
+   */
+  private String getColor(double sentiment) {
+
+      // convert sentiment to a color value in range [0,255]
+      double adjustedVal = (sentiment+1)*255/2.0;  
+      double red = 255.0 - adjustedVal;
+      double green = adjustedVal;
+
+      Color color = new Color((int)red, (int)green, 0);
+
+      StringBuilder hex = new StringBuilder(Integer.toHexString(color.getRGB() & 0xffffff));
+      if (hex.length() < 6) {
+        hex.insert(0, "0");
+      }
+      
+      hex.insert(0, "#");
+      return hex.toString();
   }
 
   /** Returns the nickname of the user with id, or null if the user has not set a nickname. */
   private String getUserNickname(String id) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query = new Query("UserInfo").setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
+    Query query = new Query(ConstantUtils.UserTable.TABLE_TYPE).setFilter(new Query.FilterPredicate(ConstantUtils.UserTable.COLUMN_ID, Query.FilterOperator.EQUAL, id));
     PreparedQuery results = datastore.prepare(query);
     Entity entity = results.asSingleEntity();
     if (entity == null) {
       return null;
     }
-    String nickname = (String) entity.getProperty("nickname");
+    String nickname = (String) entity.getProperty(ConstantUtils.UserTable.COLUMN_NICKNAME);
     return nickname;
   }
 
@@ -149,7 +196,7 @@ public class HomeServlet extends HttpServlet {
   /** Return a JSON string representing the comments data structure **/
   private String getCommentsJson(){
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query = new Query("Task").addSort("timestamp", SortDirection.DESCENDING);
+    Query query = new Query(ConstantUtils.CommentTable.TABLE_TYPE).addSort(ConstantUtils.CommentTable.COLUMN_TIMESTAMP, SortDirection.DESCENDING);
     List<Entity> comments = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(10));
     Gson gson = new Gson();
     String json = gson.toJson(comments);
