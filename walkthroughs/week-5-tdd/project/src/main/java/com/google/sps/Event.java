@@ -18,6 +18,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Comparator;
+
 
 /**
  * Event is the container class for when a specific group of people are meeting and are therefore
@@ -76,6 +78,16 @@ public final class Event {
     return Collections.unmodifiableSet(attendees);
   }
 
+  /**
+   * A comparator for sorting ranges by their end time in ascending order.
+   */
+  public static final Comparator<Event> ORDER_BY_END = new Comparator<Event>() {
+    @Override
+    public int compare(Event a, Event b) {
+      return TimeRange.ORDER_BY_END.compare(a.getWhen(), b.getWhen());
+    }
+  };
+
   @Override
   public int hashCode() {
     // For the hash code, just use the title. Most events "should" have different names and will
@@ -92,5 +104,10 @@ public final class Event {
     // {@code attendees} must be a set for equals to work as expected. According to the {@code Set}
     // interface documentation, equals will check for set-equality across all set implementations.
     return a.title.equals(b.title) && a.when.equals(b.when) && a.attendees.equals(b.attendees);
+  }
+
+  @Override
+  public String toString() {
+    return getTitle() + "- " + getWhen().toString(); 
   }
 }
