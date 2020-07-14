@@ -22,11 +22,15 @@ import java.util.Collections;
 
 public final class FindMeetingQuery {
 
-  /**
-   * Return a list of time periods that can schedule a request among events
+  /** Return a collection of time periods where all attendees in `request` are free
+   * @param events - a collection of events to be scheduled for that day 
+   * @param request - the details of a meeting proposal, including the attendees of 
+                      that event
+   * @return a collection of times where all attendees are free
    **/
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-
+    
+    // Print out input for debugging
     for (Event event: events) {
         System.out.println(event);
     }
@@ -40,8 +44,6 @@ public final class FindMeetingQuery {
             timeRanges.add(event.getWhen());
         }
     }
-
-
 
     // special case - event schedule at beginning for day
     TimeRange eventAtStartOfDay = eventAtStartOfDay(timeRanges);
@@ -72,15 +74,18 @@ public final class FindMeetingQuery {
     return viableFreePeriods;
   }
 
-     private TimeRange eventAtStartOfDay(Collection<TimeRange> timeRanges) {
+  /** Find an event that happens at the start of the day if one exists
+   * @param timeRanges - the time ranges of all the event of the days
+   * @return the event at the start of the day if it exists, null otherwise
+ **/ 
+  private TimeRange eventAtStartOfDay(Collection<TimeRange> timeRanges) {
         for (TimeRange tr: timeRanges) {
             if (tr.start() == TimeRange.START_OF_DAY) {
                 return tr;
             }
         }
-
         return null;
-    }
+  }
   
   private int getEndTime(int i, Collection<TimeRange> timeRanges) {
       for (TimeRange range: timeRanges) {
@@ -90,14 +95,11 @@ public final class FindMeetingQuery {
       return TimeRange.END_OF_DAY;
   }
 
-  private TimeRange getTimeWithStart(int startTime, Collection<TimeRange> timeRanges) {
-      for (TimeRange timeRange: timeRanges) {
-          if (timeRange.start() == startTime)
-            return timeRange;
-      }
-      return null;
-  }
-
+  /** Find the next time all attendees have a "free period" in their schedules
+   * @param endTime - the ending time of the last scheduled event
+   * @param timeRanges - the time ranges of all the event of the days 
+   * @return the next time where are attendees are free 
+  **/
   private int getStartTime(int endTime, Collection<TimeRange> timeRanges){
       // if overlap, get overlap with the latest start time
       TimeRange currentEvent = getTimeWithStart(endTime, timeRanges);
@@ -107,12 +109,7 @@ public final class FindMeetingQuery {
       }
 
         ArrayList<TimeRange> overlaps =  new ArrayList<TimeRange>();
-        for (TimeRange otherEvent: timeRanges) {
-            if (currentEvent != otherEvent && currentEvent.overlaps(otherEvent)) {
-                // get overlap with the latest startTime
-                overlaps.add(otherEvent);
-            }
-        }
+        getOverlaps(currentEvent, timeRanges, overlaps);
         
         if (overlaps.size() != 0) {
             Collections.sort(overlaps, TimeRange.ORDER_BY_END);
@@ -127,46 +124,27 @@ public final class FindMeetingQuery {
         }
   }
 
-//   private getStartTime(int i, Collection<TimeRange> timeRanges) {
-//       for (TimeRange range: timeRanges) {
-//           if (range.start() > i)
-//             return range.start();
-//       }
-//   }
-
-  /**
-   * Check whether a time conflicts with a set of events 
-  **/
-  private boolean conflicts(TimeRange proposedTime, Collection<Event> events) {
-      for (Event event: events){
-          if (proposedTime.overlaps(event.getWhen()))
-            return true;
+  /** Find an event with the start time of `startTime`
+   * @param startTime - the start time of the event to find
+   * @param timeRanges - the times of all events 
+   * @return - the event that starts at `startTime` or `null` if none exists
+  **/ 
+  private TimeRange getTimeWithStart(int startTime, Collection<TimeRange> timeRanges) {
+      for (TimeRange timeRange: timeRanges) {
+          if (timeRange.start() == startTime)
+            return timeRange;
       }
-
-      return false;
+      return null;
   }
 
-  private int getNextStartTime(Event currentEvent, Collection<Event> prunedEvents){
-      // if overlap, get overlap with the latest start time
-
-        ArrayList<TimeRange> overlaps =  new ArrayList<TimeRange>();
-        for (Event otherEvent: prunedEvents) {
-            if (currentEvent != otherEvent && currentEvent.getWhen().overlaps(otherEvent.getWhen())) {
+  private void getOverlaps(TimeRange currentEvent, Collection<TimeRange> timeRanges, Collection<TimeRange> overlaps) {
+        for (TimeRange otherEvent: timeRanges) {
+            if (currentEvent.overlaps(otherEvent) && !overlaps.contains(otherEvent)) {
                 // get overlap with the latest startTime
-                overlaps.add(otherEvent.getWhen());
+                overlaps.add(otherEvent);
+                getOverlaps(otherEvent, timeRanges, overlaps);
             }
         }
-        
-        if (overlaps.size() != 0) {
-            Collections.sort(overlaps, TimeRange.ORDER_BY_END);
-            TimeRange nextEvent = overlaps.get(overlaps.size()-1);
-            return nextEvent.end();
-        } else {
-            return currentEvent.getWhen().end();
-        }
   }
 
-  private boolean isValid(TimeRange period) {
-      return true;
-  }
 }
