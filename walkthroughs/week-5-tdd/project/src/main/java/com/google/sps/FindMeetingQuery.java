@@ -32,10 +32,13 @@ public final class FindMeetingQuery {
     }
     System.out.println("DEBUG \n");
 
-
+    // Add events scheduled with mandatory and optional guests
+    // Assuming mandatory guests can't be scheduled for 2 events
     Collection<TimeRange> timeRanges = new ArrayList<TimeRange>();
     for (Event event: events) {
-        timeRanges.add(event.getWhen());
+        if (request.getAttendees().containsAll(event.getAttendees())) { // check event attendees are a subset of request attendees
+            timeRanges.add(event.getWhen());
+        }
     }
 
 
