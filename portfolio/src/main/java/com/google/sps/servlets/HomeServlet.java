@@ -159,11 +159,11 @@ public class HomeServlet extends HttpServlet {
   /**
    * Check whether a given string contains javascript or dangerous code.
    * @param str - a string to validate
-   * @return - bool that represents whether `str` contains dangerous characters
+   * @return - true is the input `str` contains dangerous characters
    */
   private static boolean checkValidate(String str) {
         if (str != null) {
-            String patternString = ".*javascript:.*|.*//.*|.*<.*|.*>.*";
+            String patternString = ConstantUtils.CODE_ORIGIN_STRING;
             Pattern pattern = Pattern.compile(patternString);
             Matcher matcher = pattern.matcher(str);
             return matcher.matches();
