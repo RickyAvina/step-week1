@@ -14,6 +14,7 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <failOnMissingWebXml>false</failOnMissingWebXml>
+    <project.http.version>1.20.0</project.http.version>
   </properties>
 
   <dependencies>
@@ -48,6 +49,30 @@
         <artifactId>google-cloud-language</artifactId>
          <version>1.55.0</version>
     </dependency>
+    <!-- Google API Client -->
+   <dependency>
+     <groupId>com.google.api-client</groupId>
+     <artifactId>google-api-client</artifactId>
+     <version>1.30.9</version>
+   </dependency>
+   <!-- Google Jetty Client -->
+   <dependency>
+    <groupId>com.google.oauth-client</groupId>
+    <artifactId>google-oauth-client-jetty</artifactId>
+    <version>1.12.0-beta</version>
+   </dependency>
+   <!-- Google HTTP Client -->
+   <dependency>
+    <groupId>com.google.http-client</groupId>
+    <artifactId>google-http-client-jackson2</artifactId>
+    <version>${project.http.version}</version>
+   </dependency>
+   <!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-youtube -->
+   <dependency>
+    <groupId>com.google.apis</groupId>
+    <artifactId>google-api-services-youtube</artifactId>
+    <version>v3-rev222-1.25.0</version>
+   </dependency>
   </dependencies>
 
   <build>
