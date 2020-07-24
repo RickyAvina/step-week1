@@ -15,7 +15,6 @@
 package com.google.sps.servlets;
 
 import com.google.sps.data.ConstantUtils;
-// import com.google.sps.data.ConstantUtils.CommentTable;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -42,6 +41,8 @@ import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
 import java.awt.Color;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 @WebServlet("/home")
 public class HomeServlet extends HttpServlet {
@@ -84,7 +85,6 @@ public class HomeServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
-      String comment = (String) entity.getProperty(ConstantUtils.CommentTable.COLUMN_COMMENT);
       long timestamp = (long) entity.getProperty(ConstantUtils.CommentTable.COLUMN_TIMESTAMP);
       Key key_id = entity.getKey();
       String comment_id = Long.toString((long) entity.getProperty(ConstantUtils.CommentTable.COLUMN_COMMENT_ID));
@@ -92,6 +92,13 @@ public class HomeServlet extends HttpServlet {
       double sentiment = (double) entity.getProperty(ConstantUtils.CommentTable.COLUMN_SENTIMENT);
       String sentimentHex = getColor(sentiment);
       String nickname = getUserNickname(user_id);
+
+      // prevent script injection
+      String comment = (String) entity.getProperty(ConstantUtils.CommentTable.COLUMN_COMMENT);
+      if (checkValidate(comment)){
+          System.err.println("Dangerous characters detected");
+          continue;
+      }
 
       out.println("<li>" +
                     "<span style='color:blue;'>" + convertTime(timestamp) + "</span> " +
@@ -148,6 +155,21 @@ public class HomeServlet extends HttpServlet {
 
     response.sendRedirect("/home");
   }
+
+  /**
+   * Check whether a given string contains javascript or dangerous code.
+   * @param str - a string to validate
+   * @return - true is the input `str` contains dangerous characters
+   */
+  private static boolean checkValidate(String str) {
+        if (str != null) {
+            String patternString = ConstantUtils.CODE_ORIGIN_STRING;
+            Pattern pattern = Pattern.compile(patternString);
+            Matcher matcher = pattern.matcher(str);
+            return matcher.matches();
+        }
+        return false;
+    }
 
   /**
    * Convert a sentiment to a color

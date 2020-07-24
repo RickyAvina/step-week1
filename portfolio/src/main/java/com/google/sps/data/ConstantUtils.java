@@ -17,6 +17,8 @@ package com.google.sps.data;
 /** All of the constants used by the servlets **/
 public final class ConstantUtils {
 
+    public static final String CODE_ORIGIN_STRING = ".*javascript:.*|.*//.*|.*<.*|.*>.*";
+
     /** Constants to be used by Comments Table in datastore **/
     public static class CommentTable {
         public static final String TABLE_TYPE = "Comment";
